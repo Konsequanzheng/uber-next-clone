@@ -4,7 +4,8 @@ import mapboxgl from 'mapbox-gl'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicXVhbnpoZW5nIiwiYSI6ImNsbjRocGU4aTAwbmMycnBmdHFsNjVncnoifQ.PG7CEnlbXOHlv7tIHuAMKg';
 
-const Map = () => {
+const Map = (props) => {
+
     // useEffect is only ran first time the appl gets loaded
     useEffect(() => {
         const map = new mapboxgl.Map({
@@ -13,8 +14,32 @@ const Map = () => {
         center: [-99.29011, 39.39172],
         zoom: 3
         });
-    });
 
+        if(props.pickupCoordinates) {
+            addToMap(map, props.pickupCoordinates)
+        }
+        if(props.dropoffCoordinates) {
+            addToMap(map, props.dropoffCoordinates)
+        }
+
+        if(props.pickupCoordinates && props.dropoffCoordinates) {
+            map.fitBounds([
+                props.pickupCoordinates,
+                props.dropoffCoordinates
+            ], {
+                padding: 60
+            })
+        }
+
+    }, [props.pickupCoordinates, props.dropoffCoordinates]);
+
+    const addToMap = (map, coordinates) => {
+        // Create a default Marker and add it to the map.
+        const marker1 = new mapboxgl.Marker()
+            .setLngLat(coordinates)
+            .addTo(map);
+    }
+    
     return (
         <Wrapper id='map'></Wrapper>
     )
