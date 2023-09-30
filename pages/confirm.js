@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react'
 import tw from 'tailwind-styled-components'
 import Map from './components/Map'
 import { useRouter } from 'next/router'
+import RideSelector from './components/RideSelector'
+import Link from 'next/link'
 
 const Confirm = () => {
     const router = useRouter()
     const { pickup, dropoff } = router.query
 
-    console.log("Pickup", pickup)
-    console.log("Dropoff", dropoff)
-
-    const [ pickupCoordinates, setPickupCoordinates ] = useState()
-    const [ dropoffCoordinates, setDropoffCoordinates ] = useState()
+    const [ pickupCoordinates, setPickupCoordinates ] = useState([0, 0])
+    const [ dropoffCoordinates, setDropoffCoordinates ] = useState([0, 0])
 
     const getPickupCoordinates = (pickup) => {
         fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${pickup}.json?` + 
@@ -46,15 +45,23 @@ const Confirm = () => {
 
     return (
         <Wrapper>
+            <Link href='search/'>
+                <BackButton src='https://img.icons8.com/ios-filled/50/000000/left.png' />
+            </Link>
             <Map 
                 pickupCoordinates={pickupCoordinates}
                 dropoffCoordinates={dropoffCoordinates}
             />
             <RideContainer>
-                Ride Selector
-                Confirm Button
-                {pickupCoordinates}
-                {dropoffCoordinates}
+                <RideSelector 
+                    pickupCoordinates={pickupCoordinates}
+                    dropoffCoordinates={dropoffCoordinates}
+                />
+                <ConfirmButtonContainer>
+                    <ConfirmButton>
+                        Confirm UberX
+                    </ConfirmButton>
+                </ConfirmButtonContainer>
             </RideContainer>
         </Wrapper>
     )
@@ -63,9 +70,21 @@ const Confirm = () => {
 export default Confirm
 
 const RideContainer = tw.div`
-    flex-1
+    flex flex-col flex-1 h-1/2
 `
 
 const Wrapper = tw.div`
     flex h-screen flex-col
+`
+
+const ConfirmButton = tw.div`
+    bg-black text-white text-xl text-center py-3 m-3
+`
+
+const ConfirmButtonContainer = tw.div`
+    border-t-2
+`
+
+const BackButton = tw.img`
+    h-12 w-12 rounded-full bg-white
 `
