@@ -25,20 +25,25 @@ export default function Home() {
         </Header>
         {/* ActionButtons */}
         <ActionButtons>
-          <Link href='search/'>
-            <ActionButton>
-              <ActionButtonImage src='https://i.ibb.co/cyvcpfF/uberx.png'/>
-              Ride
-            </ActionButton>
-          </Link>
+          <ActionButtonContainer>
+            <Link href='search/'>
+              <ActionButton>
+                <ActionButtonImage src='https://i.ibb.co/cyvcpfF/uberx.png'/>
+                Ride
+              </ActionButton>
+            </Link>
+          </ActionButtonContainer>
+          
           <ActionButton>
           <ActionButtonImage src='https://i.ibb.co/n776JLm/bike.png'/>
             Wheels
           </ActionButton>
+
           <ActionButton>
           <ActionButtonImage src='https://i.ibb.co/5RjchBg/uberschedule.png'/>
             Reserve
           </ActionButton>
+
         </ActionButtons>
         <InputButton> Where to?</InputButton>
         {/* InputBUtton */}
@@ -88,4 +93,8 @@ const ActionButtonImage = tw.img`
 
 const InputButton = tw.div`
   h-20 bg-gray-200 text-2xl p-4 flex items-center mt-8
+`
+
+const ActionButtonContainer = tw.div`
+  flex-1
 `
