@@ -1,15 +1,34 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import tw from 'tailwind-styled-components'
 import mapboxgl from 'mapbox-gl'
 import Map from './components/Map'
 import Link from 'next/link'
+import { auth } from '../firebase'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { useRouter } from 'next/router'
 
 const inter = Inter({ subsets: ['latin'] })
 
 
 export default function Home() {
+  const [user, setUser] = useState(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, user => {
+      if(user) {
+        setUser({
+          name: user.displayName,
+          photoUrl: user.photoURL,
+        })
+      } else {
+        setUser(null)
+        router.push('/login')
+      }
+    })
+  }, [])
 
   return (
     <Wrapper>
@@ -19,8 +38,8 @@ export default function Home() {
         <Header>
           <UberLogo src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Uber_logo_2018.svg/800px-Uber_logo_2018.svg.png' />
           <Profile>
-            <Name>Quan Zheng</Name>
-            <UserImage src='https://media.licdn.com/dms/image/D4D03AQFsasCWgt7nSw/profile-displayphoto-shrink_800_800/0/1670387506050?e=1701302400&v=beta&t=dFW_ogWNcPoFMMPaNfZSuo4xCrVxlhq8vUQ2aEOHoAU'/>
+            <Name>{user && user.name}</Name>
+            <UserImage src={user && user.photoUrl} onClick={() => signOut(auth)}/>
           </Profile>
         </Header>
         {/* ActionButtons */}
@@ -76,7 +95,7 @@ const UberLogo = tw.img`
 `
 
 const UserImage = tw.img`
-  h-12 w-12 rounded-full border border-gray-200 p-px
+  h-12 w-12 rounded-full border border-gray-200 p-px cursor-pointer
 `
 
 const ActionButtons = tw.div`

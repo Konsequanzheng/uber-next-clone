@@ -81,7 +81,7 @@ const Wrapper = tw.div`
 `
 
 const ConfirmButton = tw.div`
-    bg-black text-white text-xl text-center py-3 m-3
+    bg-black text-white text-xl text-center py-3 m-3 cursor-pointer
 `
 
 const ConfirmButtonContainer = tw.div`

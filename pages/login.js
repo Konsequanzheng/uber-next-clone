@@ -1,16 +1,29 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import tw from 'tailwind-styled-components'
+import {useRouter, userRouter} from 'next/router'
+import {signInWithPopup, onAuthStateChanged} from 'firebase/auth'
+import {auth, provider} from '../firebase'
 
 const Login = () => {
-  return (
-    <Wrapper>
-        <UberLogo src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Uber_logo_2018.svg/800px-Uber_logo_2018.svg.png' />
-        <Title>Log in to access your account</Title>
-        <HeadImage src='https://i.ibb.co/CsV9RYZ/login-image.png' />
-        <SignInButton>Sign in with Google</SignInButton>
-        
-    </Wrapper>
-  )
+
+    const router = useRouter()
+    useEffect(() => {
+        onAuthStateChanged(auth, user => {
+            if (user) { // if the user is logged in (i.e. exists)
+                router.push('/')
+            }
+        })
+    }, [])
+
+    return (
+        <Wrapper>
+            <UberLogo src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Uber_logo_2018.svg/800px-Uber_logo_2018.svg.png' />
+            <Title>Log in to access your account</Title>
+            <HeadImage src='https://i.ibb.co/CsV9RYZ/login-image.png' />
+            <SignInButton onClick={() => signInWithPopup(auth, provider)}>Sign in with Google</SignInButton>
+            
+        </Wrapper>
+    )
 }
 
 export default Login
@@ -20,7 +33,7 @@ const Wrapper = tw.div`
 `
 
 const SignInButton = tw.div`
-    bg-black text-white text-center py-4 mt-8
+    bg-black text-white text-center py-4 mt-8 cursor-pointer
 `
 
 const UberLogo = tw.img`
